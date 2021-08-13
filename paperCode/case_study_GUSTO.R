@@ -10,6 +10,7 @@ settings$auc_n_sim <- 0   #If set to 0, it will not calculate AUC with optimism 
 settings$sample_size_n_sim_outer <- 0 #if set to 0 will not do
 settings$sample_size_n_sim_inner <- 100 #Voi calculations for each point witin each iteration
 settings$sample_sizes <- c(250, 500, 1000, 2000, 4000, 8000, 16000, 32000, Inf)
+settings$sampleInfo_size <- 500
 
 case_study_gusto <- function(load_file=NULL, save_file=NULL)
 {
@@ -47,12 +48,16 @@ case_study_gusto <- function(load_file=NULL, save_file=NULL)
     if(settings$n_sim>0)
     {
       message("VoI calculations...")
-      results$res0 <<- voi.glmnet(reg, x, y, n_sim = settings$n_sim, Bayesian_bootstrap = F)
+      # results$res0 <<- voi.glmnet(reg, x, y, n_sim = settings$n_sim, Bayesian_bootstrap = F)
+      results$res0 <<- voi.glmnet(reg, x, y, n_sim = settings$n_sim, Bayesian_bootstrap = F,
+                                  sampleInfo_size = settings$sampleInfo_size)
 
       results$coeffs <<- VoIPred:::aux$coeffs
       results$bs_coeffs <<- VoIPred:::aux$bs_coeffs
 
-      results$res1 <<- voi.glmnet(reg, x, y, n_sim = settings$n_sim, Bayesian_bootstrap = T)
+      # results$res1 <<- voi.glmnet(reg, x, y, n_sim = settings$n_sim, Bayesian_bootstrap = T)
+      results$res1 <<- voi.glmnet(reg, x, y, n_sim = settings$n_sim, Bayesian_bootstrap = T,
+                                  sampleInfo_size = settings$sampleInfo_size)
     }
 
     if(settings$sample_size_n_sim_outer>0)
@@ -217,3 +222,5 @@ calc_auc <- function(reg_obj, x, y, n_sim=1000)
 
   return(c(auc=auc,optimism=optimism/n_sim))
 }
+
+

@@ -1,12 +1,15 @@
 ---
 title: "Case_study_GUSTO"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
 load_file=paste0(getwd(),"/Results.RDS")
 
 library(knitr)
+library(VoIPred)
 knitr::opts_chunk$set(echo = TRUE)
 
 load_results <- FALSE  #If true, will not run the simulation, rather will load the results
@@ -14,7 +17,7 @@ save_results <- TRUE
 ```
 
 ```{r echo=FALSE, message=FALSE}
-source("case_study_GUSTO.R")
+source(paste0(getwd(),"/paperCode/case_study_GUSTO.R"))
 print("R code succesfully sourced.\n")
 ```
 
@@ -110,3 +113,7 @@ if(!is.null(results$voi_by_sample_size))
 ```{r echo=FALSE}
 print(sprintf("voi at index threshold is: %.4f",results$voi_by_sample_size[dim(results$voi_by_sample_size)[1],2]))
 print(sprintf("voi_r at index threshold is: %.4f",results$voi_by_sample_size[dim(results$voi_by_sample_size)[1],3]))
+```
+
+
+
